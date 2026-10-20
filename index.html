@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#050817"
+  >
+
+  <meta
+    name="description"
+    content="Our Memories — Husen × Ike"
+  >
+
+  <title>Our Memories | Husen × Ike</title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=1"
+  >
+</head>
+
+<body>
+
+  <!-- BACKGROUND -->
+
+  <div
+    class="universe"
+    aria-hidden="true"
+  >
+    <div class="stars"></div>
+    <div class="nebula nebula--one"></div>
+    <div class="nebula nebula--two"></div>
+    <div class="nebula nebula--three"></div>
+    <div class="noise"></div>
+  </div>
+
+
+  <!-- TOP BAR -->
+
+  <header class="topbar">
+
+    <a
+      href="#"
+      class="brand"
+      id="brandButton"
+    >
+      <span class="brand__icon">♡</span>
+
+      <span>
+        <strong>H & I</strong>
+        <small>MEMORY ARCHIVE</small>
+      </span>
+    </a>
+
+
+    <nav
+      class="nav"
+      aria-label="Navigasi utama"
+    >
+      <button
+        class="nav__button is-active"
+        data-view="home"
+        type="button"
+      >
+        Home
+      </button>
+
+      <button
+        class="nav__button"
+        data-view="timeline"
+        type="button"
+      >
+        Timeline
+      </button>
+
+      <button
+        class="nav__button"
+        data-view="gallery"
+        type="button"
+      >
+        Gallery
+      </button>
+
+      <button
+        class="nav__button"
+        data-view="core"
+        type="button"
+      >
+        Memory Core
+      </button>
+    </nav>
+
+
+    <button
+      class="icon-button"
+      id="randomMemoryButton"
+      type="button"
+      aria-label="Buka memory acak"
+      title="Random Memory"
+    >
+      ✦
+    </button>
+
+  </header>
+
+
+  <!-- MOBILE NAV -->
+
+  <nav
+    class="mobile-nav"
+    aria-label="Navigasi mobile"
+  >
+    <button
+      class="mobile-nav__button is-active"
+      data-view="home"
+      type="button"
+    >
+      <span>⌂</span>
+      <small>Home</small>
+    </button>
+
+    <button
+      class="mobile-nav__button"
+      data-view="timeline"
+      type="button"
+    >
+      <span>◌</span>
+      <small>Timeline</small>
+    </button>
+
+    <button
+      class="mobile-nav__button"
+      data-view="gallery"
+      type="button"
+    >
+      <span>▦</span>
+      <small>Gallery</small>
+    </button>
+
+    <button
+      class="mobile-nav__button"
+      data-view="core"
+      type="button"
+    >
+      <span>✦</span>
+      <small>Core</small>
+    </button>
+  </nav>
+
+
+  <main class="app">
+
+
+    <!-- ======================================
+         HOME
+    ======================================= -->
+
+    <section
+      class="view is-active"
+      id="homeView"
+      data-view-panel="home"
+    >
+
+      <div class="hero-copy">
+
+        <p class="eyebrow">
+          HUSEN × IKE / ARCHIVE 2026
+        </p>
+
+        <h1>
+          Our
+          <span>Memories.</span>
+        </h1>
+
+        <p class="hero-copy__description">
+          Different moments, same us.
+          A small universe built from things
+          worth remembering.
+        </p>
+
+      </div>
+
+
+      <div class="home-layout">
+
+
+        <!-- MEMORY CORE -->
+
+        <section class="core-panel">
+
+          <div class="core-panel__header">
+
+            <div>
+              <span class="section-label">
+                MEMORY CORE
+              </span>
+
+              <strong>
+                Explore our universe
+              </strong>
+            </div>
+
+            <div class="live-indicator">
+              <i></i>
+              ONLINE
+            </div>
+
+          </div>
+
+
+          <div
+            class="memory-universe"
+            id="memoryUniverse"
+          >
+
+            <div class="orbit orbit--one"></div>
+            <div class="orbit orbit--two"></div>
+            <div class="orbit orbit--three"></div>
+
+            <div
+              class="orbit-glow"
+              aria-hidden="true"
+            ></div>
+
+
+            <!-- JS GENERATES NODES -->
+
+            <div
+              class="memory-nodes"
+              id="memoryNodes"
+            ></div>
+
+
+            <!-- CENTER CORE -->
+
+            <button
+              class="memory-core"
+              id="memoryCore"
+              type="button"
+              aria-label="Buka memory utama"
+            >
+
+              <span class="memory-core__rings"></span>
+
+              <span class="memory-core__image">
+
+                <img
+                  id="coreImage"
+                  src=""
+                  alt=""
+                >
+
+                <span class="memory-core__overlay"></span>
+
+              </span>
+
+              <span class="memory-core__info">
+
+                <small id="coreDate">
+                  MEMORY
+                </small>
+
+                <strong id="coreTitle">
+                  Our Memory
+                </strong>
+
+                <em>
+                  OPEN MEMORY
+                </em>
+
+              </span>
+
+            </button>
+
+
+            <div
+              class="core-pulse core-pulse--one"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="core-pulse core-pulse--two"
+              aria-hidden="true"
+            ></div>
+
+          </div>
+
+
+          <div class="core-controls">
+
+            <button
+              class="circle-button"
+              id="previousMemoryButton"
+              type="button"
+              aria-label="Memory sebelumnya"
+            >
+              ←
+            </button>
+
+            <div class="core-controls__status">
+
+              <strong id="currentMemoryNumber">
+                01
+              </strong>
+
+              <span>/</span>
+
+              <span id="totalMemoryNumber">
+                00
+              </span>
+
+            </div>
+
+            <button
+              class="circle-button"
+              id="nextMemoryButton"
+              type="button"
+              aria-label="Memory berikutnya"
+            >
+              →
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- STATS -->
+
+        <aside class="stats-panel">
+
+          <div class="stats-panel__title">
+
+            <span class="section-label">
+              ARCHIVE STATUS
+            </span>
+
+            <small>
+              Updated just now
+            </small>
+
+          </div>
+
+
+          <article class="stat-card">
+
+            <span class="stat-card__icon">
+              ◈
+            </span>
+
+            <div>
+              <strong id="memoryCount">
+                0
+              </strong>
+
+              <span>
+                MEMORIES
+              </span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <span class="stat-card__icon">
+              ◷
+            </span>
+
+            <div>
+              <strong id="dayCount">
+                0
+              </strong>
+
+              <span>
+                DAYS
+              </span>
+            </div>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <span class="stat-card__icon">
+              ⌖
+            </span>
+
+            <div>
+              <strong id="placeCount">
+                0
+              </strong>
+
+              <span>
+                PLACES
+              </span>
+            </div>
+
+          </article>
+
+
+          <button
+            class="random-card"
+            id="randomMemoryCard"
+            type="button"
+          >
+
+            <span>✦</span>
+
+            <div>
+              <strong>
+                Random Memory
+              </strong>
+
+              <small>
+                Take me somewhere
+              </small>
+            </div>
+
+            <b>→</b>
+
+          </button>
+
+        </aside>
+
+      </div>
+
+
+      <!-- YEAR TIMELINE -->
+
+      <section class="year-panel">
+
+        <div class="year-panel__header">
+
+          <div>
+            <span class="section-label">
+              TIMELINE
+            </span>
+
+            <strong id="timelineYear">
+              2026
+            </strong>
+          </div>
+
+          <button
+            class="ghost-button"
+            data-view="timeline"
+            type="button"
+          >
+            View full timeline →
+          </button>
+
+        </div>
+
+
+        <div
+          class="mini-timeline"
+          id="miniTimeline"
+        ></div>
+
+      </section>
+
+    </section>
+
+
+
+    <!-- ======================================
+         TIMELINE VIEW
+    ======================================= -->
+
+    <section
+      class="view"
+      id="timelineView"
+      data-view-panel="timeline"
+    >
+
+      <header class="page-heading">
+
+        <p class="eyebrow">
+          CHRONOLOGICAL ARCHIVE
+        </p>
+
+        <h2>
+          Our
+          <span>Timeline.</span>
+        </h2>
+
+        <p>
+          Every memory has a place in time.
+        </p>
+
+      </header>
+
+
+      <div
+        class="timeline-list"
+        id="timelineList"
+      ></div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         GALLERY VIEW
+    ======================================= -->
+
+    <section
+      class="view"
+      id="galleryView"
+      data-view-panel="gallery"
+    >
+
+      <header class="page-heading page-heading--row">
+
+        <div>
+
+          <p class="eyebrow">
+            VISUAL ARCHIVE
+          </p>
+
+          <h2>
+            Memory
+            <span>Gallery.</span>
+          </h2>
+
+          <p>
+            Small moments, big meaning.
+          </p>
+
+        </div>
+
+
+        <div class="gallery-filter">
+
+          <button
+            class="filter-button is-active"
+            data-filter="all"
+            type="button"
+          >
+            All
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="2026"
+            type="button"
+          >
+            2026
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="favorite"
+            type="button"
+          >
+            Favorites
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <div
+        class="gallery-grid"
+        id="galleryGrid"
+      ></div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         CORE VIEW
+    ======================================= -->
+
+    <section
+      class="view"
+      id="coreView"
+      data-view-panel="core"
+    >
+
+      <header class="page-heading core-heading">
+
+        <p class="eyebrow">
+          INTERACTIVE MEMORY SYSTEM
+        </p>
+
+        <h2>
+          Memory
+          <span>Core.</span>
+        </h2>
+
+        <p>
+          Every light represents a moment.
+          Touch one to bring it back.
+        </p>
+
+      </header>
+
+
+      <div
+        class="expanded-core"
+        id="expandedCore"
+      >
+
+        <div class="expanded-core__rings">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+
+        <div
+          class="expanded-core__nodes"
+          id="expandedCoreNodes"
+        ></div>
+
+
+        <button
+          class="expanded-core__center"
+          id="expandedCoreCenter"
+          type="button"
+        >
+
+          <img
+            id="expandedCoreImage"
+            src=""
+            alt=""
+          >
+
+          <span></span>
+
+          <div>
+            <small>
+              CURRENT MEMORY
+            </small>
+
+            <strong id="expandedCoreTitle">
+              Memory
+            </strong>
+          </div>
+
+        </button>
+
+      </div>
+
+
+      <div class="core-bottom-info">
+
+        <span>
+          SELECTED
+        </span>
+
+        <strong id="expandedCoreDate">
+          —
+        </strong>
+
+        <i></i>
+
+        <strong id="expandedCoreLocation">
+          —
+        </strong>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ======================================
+       MEMORY MODAL
+  ======================================= -->
+
+  <div
+    class="memory-modal"
+    id="memoryModal"
+    aria-hidden="true"
+  >
+
+    <button
+      class="memory-modal__backdrop"
+      id="modalBackdrop"
+      type="button"
+      aria-label="Tutup memory"
+    ></button>
+
+
+    <article class="memory-detail">
+
+      <button
+        class="memory-detail__close"
+        id="closeMemoryButton"
+        type="button"
+        aria-label="Tutup"
+      >
+        ×
+      </button>
+
+
+      <div class="memory-detail__image">
+
+        <img
+          id="detailImage"
+          src=""
+          alt=""
+        >
+
+        <div class="memory-detail__counter">
+
+          <span id="detailIndex">
+            01
+          </span>
+
+          <i>/</i>
+
+          <span id="detailTotal">
+            00
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="memory-detail__content">
+
+        <div class="memory-detail__meta">
+
+          <span id="detailDate">
+            —
+          </span>
+
+          <span class="meta-dot"></span>
+
+          <span id="detailLocation">
+            —
+          </span>
+
+        </div>
+
+
+        <h2 id="detailTitle">
+          Memory
+        </h2>
+
+
+        <p id="detailCaption">
+          —
+        </p>
+
+
+        <div class="memory-detail__tags"
+             id="detailTags">
+        </div>
+
+
+        <footer class="memory-detail__footer">
+
+          <div>
+            <small>
+              ARCHIVED BY
+            </small>
+
+            <strong>
+              Husen × Ike
+            </strong>
+          </div>
+
+
+          <div class="detail-navigation">
+
+            <button
+              id="detailPreviousButton"
+              type="button"
+              aria-label="Sebelumnya"
+            >
+              ←
+            </button>
+
+            <button
+              id="favoriteButton"
+              type="button"
+              aria-label="Favorite"
+            >
+              ♡
+            </button>
+
+            <button
+              id="detailNextButton"
+              type="button"
+              aria-label="Berikutnya"
+            >
+              →
+            </button>
+
+          </div>
+
+        </footer>
+
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <script src="script.js?v=1"></script>
+
+</body>
+</html>
