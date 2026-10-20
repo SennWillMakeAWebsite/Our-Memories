@@ -1,655 +1,1108 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   "use strict";
 
-
-  /* =========================================
+  /* =========================================================
      HELPERS
-  ========================================= */
+  ========================================================= */
 
-  const $ = (
-    selector,
-    root = document
-  ) => root.querySelector(selector);
+  const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
 
-
-  const $$ = (
-    selector,
-    root = document
-  ) => [
-    ...root.querySelectorAll(selector)
-  ];
-
+  const $$ = (selector, parent = document) =>
+    [...parent.querySelectorAll(selector)];
 
   const pad = (number) =>
-    String(number).padStart(
-      2,
-      "0"
-    );
+    String(number).padStart(2, "0");
+
+  const wait = (ms) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
 
-  /* =========================================
-     TEMPORARY MEMORY DATA
-
-     Nanti bagian ini diganti data Supabase.
-  ========================================= */
+  /* =========================================================
+     MEMORY DATA
+     Sementara masih dummy.
+     Nanti bagian ini diganti Supabase.
+  ========================================================= */
 
   const memories = [
-
     {
       id: 1,
 
-      title:
-        "Jalan sore",
+      title: "The Beginning",
 
-      date:
-        "2026-06-07",
-
-      location:
-        "Cirebon",
+      date: "2026-01-12",
 
       caption:
-        "Nggak harus selalu tentang tempat yang luar biasa. Kadang yang bikin sebuah hari tetap diingat justru siapa yang ada di sana.",
+        "Some memories don't need to be perfect. They only need to mean something.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-01/1000/1200",
+        "https://picsum.photos/seed/husen-ike-01/1200/1500",
 
-      favorite:
-        true,
+      favorite: true,
 
       tags: [
-        "jalan",
-        "sore",
-        "together"
+        "us",
+        "beginning"
       ]
     },
-
 
     {
       id: 2,
 
-      title:
-        "Random photo",
+      title: "A Quiet Moment",
 
-      date:
-        "2026-06-15",
-
-      location:
-        "Cirebon",
+      date: "2026-02-08",
 
       caption:
-        "Foto yang awalnya biasa aja, tapi entah kenapa akhirnya jadi salah satu yang paling aku suka.",
+        "Nothing extraordinary happened. Somehow, that's exactly why I remember it.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-02/1000/1200",
+        "https://picsum.photos/seed/husen-ike-02/1200/1500",
 
-      favorite:
-        false,
+      favorite: false,
 
       tags: [
-        "random",
-        "photo"
+        "quiet",
+        "memory"
       ]
     },
-
 
     {
       id: 3,
 
-      title:
-        "Hari itu",
+      title: "That Day",
 
-      date:
-        "2026-07-04",
-
-      location:
-        "Cirebon",
+      date: "2026-03-19",
 
       caption:
-        "Ada hari yang nggak perlu dibuat dramatis untuk tetap punya tempat sendiri di ingatan.",
+        "Just another day from the outside. A little more important from here.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-03/1000/1200",
+        "https://picsum.photos/seed/husen-ike-03/1200/1500",
 
-      favorite:
-        true,
+      favorite: true,
 
       tags: [
-        "day",
-        "memory"
+        "together",
+        "day"
       ]
     },
-
 
     {
       id: 4,
 
-      title:
-        "Sunset",
+      title: "One of Those Days",
 
-      date:
-        "2026-07-07",
-
-      location:
-        "Cirebon",
+      date: "2026-04-11",
 
       caption:
-        "Langitnya bagus. Tapi alasan kenapa aku masih ingat hari ini bukan cuma karena langitnya.",
+        "A small piece of time that somehow stayed longer than expected.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-04/1000/1200",
+        "https://picsum.photos/seed/husen-ike-04/1200/1500",
 
-      favorite:
-        true,
+      favorite: false,
 
       tags: [
-        "sunset",
-        "evening"
+        "moment",
+        "ordinary"
       ]
     },
-
 
     {
       id: 5,
 
-      title:
-        "Makan bareng",
+      title: "Still Here",
 
-      date:
-        "2026-07-28",
-
-      location:
-        "Cirebon",
+      date: "2026-05-24",
 
       caption:
-        "Momen sederhana yang mungkin kelihatan biasa dari luar. Buat arsip ini, tetap penting.",
+        "Time kept moving, but some things were worth keeping exactly where they were.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-05/1000/1200",
+        "https://picsum.photos/seed/husen-ike-05/1200/1500",
 
-      favorite:
-        false,
-
-      tags: [
-        "food",
-        "together"
-      ]
-    },
-
-
-    {
-      id: 6,
-
-      title:
-        "Another day",
-
-      date:
-        "2026-08-02",
-
-      location:
-        "Cirebon",
-
-      caption:
-        "Satu hari lagi yang akhirnya punya koordinat sendiri di antara semua memory lainnya.",
-
-      image:
-        "https://picsum.photos/seed/senn-memory-06/1000/1200",
-
-      favorite:
-        false,
+      favorite: true,
 
       tags: [
-        "daily",
-        "random"
-      ]
-    },
-
-
-    {
-      id: 7,
-
-      title:
-        "Favorite moment",
-
-      date:
-        "2026-08-17",
-
-      location:
-        "Cirebon",
-
-      caption:
-        "Beberapa memory nggak perlu alasan panjang buat jadi favorit.",
-
-      image:
-        "https://picsum.photos/seed/senn-memory-07/1000/1200",
-
-      favorite:
-        true,
-
-      tags: [
-        "favorite",
+        "remember",
         "us"
       ]
     },
 
+    {
+      id: 6,
+
+      title: "A Little Chaos",
+
+      date: "2026-06-16",
+
+      caption:
+        "Not every good memory is calm. Some of them are good because everything was a mess.",
+
+      image:
+        "https://picsum.photos/seed/husen-ike-06/1200/1500",
+
+      favorite: false,
+
+      tags: [
+        "chaos",
+        "fun"
+      ]
+    },
+
+    {
+      id: 7,
+
+      title: "Something Simple",
+
+      date: "2026-07-07",
+
+      caption:
+        "No big story. No dramatic scene. Just something simple that felt worth remembering.",
+
+      image:
+        "https://picsum.photos/seed/husen-ike-07/1200/1500",
+
+      favorite: false,
+
+      tags: [
+        "simple",
+        "together"
+      ]
+    },
 
     {
       id: 8,
 
-      title:
-        "Just us",
+      title: "The Good Part",
 
-      date:
-        "2026-09-03",
-
-      location:
-        "Cirebon",
+      date: "2026-08-21",
 
       caption:
-        "Satu frame kecil dari sesuatu yang jauh lebih besar dari sekadar sebuah foto.",
+        "If the whole day disappeared and only this part remained, that would still be enough.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-08/1000/1200",
+        "https://picsum.photos/seed/husen-ike-08/1200/1500",
 
-      favorite:
-        true,
+      favorite: true,
 
       tags: [
-        "us",
-        "photo"
+        "favorite",
+        "moment"
       ]
     },
-
 
     {
       id: 9,
 
-      title:
-        "Night memory",
+      title: "Another Piece of Us",
 
-      date:
-        "2026-09-19",
-
-      location:
-        "Cirebon",
+      date: "2026-09-05",
 
       caption:
-        "Ada beberapa hal yang justru terasa lebih jelas ketika hari sudah mulai gelap.",
+        "Another little piece added to a collection that was never really planned.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-09/1000/1200",
+        "https://picsum.photos/seed/husen-ike-09/1200/1500",
 
-      favorite:
-        false,
+      favorite: false,
 
       tags: [
-        "night",
-        "city"
+        "archive",
+        "us"
       ]
     },
-
 
     {
       id: 10,
 
-      title:
-        "One more memory",
+      title: "Worth Keeping",
 
-      date:
-        "2026-10-04",
-
-      location:
-        "Cirebon",
+      date: "2026-09-27",
 
       caption:
-        "Arsip ini bertambah satu lagi. Mungkin kecil, tapi tetap bagian dari semuanya.",
+        "Some things deserve more than becoming another photo buried somewhere in a gallery.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-10/1000/1200",
+        "https://picsum.photos/seed/husen-ike-10/1200/1500",
 
-      favorite:
-        false,
-
-      tags: [
-        "October",
-        "memory"
-      ]
-    },
-
-
-    {
-      id: 11,
-
-      title:
-        "A quiet moment",
-
-      date:
-        "2026-10-17",
-
-      location:
-        "Cirebon",
-
-      caption:
-        "Nggak banyak yang terjadi. Dan mungkin justru itu yang bikin momennya terasa tenang.",
-
-      image:
-        "https://picsum.photos/seed/senn-memory-11/1000/1200",
-
-      favorite:
-        true,
+      favorite: true,
 
       tags: [
-        "quiet",
+        "keep",
         "favorite"
       ]
     },
 
+    {
+      id: 11,
+
+      title: "Between Everything",
+
+      date: "2026-10-08",
+
+      caption:
+        "Somewhere between everything that happened, there was this.",
+
+      image:
+        "https://picsum.photos/seed/husen-ike-11/1200/1500",
+
+      favorite: false,
+
+      tags: [
+        "between",
+        "memory"
+      ]
+    },
 
     {
       id: 12,
 
-      title:
-        "Today",
+      title: "Another Chapter",
 
-      date:
-        "2026-10-20",
-
-      location:
-        "Cirebon",
+      date: "2026-10-19",
 
       caption:
-        "Memory terbaru untuk sebuah tempat yang akan terus bertambah seiring waktu.",
+        "Not the end of anything. Just another page that happened to be worth saving.",
 
       image:
-        "https://picsum.photos/seed/senn-memory-12/1000/1200",
+        "https://picsum.photos/seed/husen-ike-12/1200/1500",
 
-      favorite:
-        true,
+      favorite: true,
 
       tags: [
-        "today",
-        "new"
+        "chapter",
+        "us"
       ]
     }
-
   ];
 
 
-  /* =========================================
-     STATE
-  ========================================= */
+  /* =========================================================
+     DOM
+  ========================================================= */
 
-  let currentMemoryIndex =
-    memories.length - 1;
+  const brandButton =
+    $("#brandButton");
 
-  let activeView =
-    "home";
+  const orbitNodes =
+    $("#orbitNodes");
 
-  let galleryFilter =
-    "all";
-
-
-  /* =========================================
-     ELEMENTS
-  ========================================= */
-
-  const views =
-    $$(".view");
-
-  const navigationButtons =
-    $$("[data-view]");
-
-
-  const memoryNodes =
-    $("#memoryNodes");
-
-  const memoryCore =
-    $("#memoryCore");
-
-  const coreImage =
-    $("#coreImage");
-
-  const coreTitle =
-    $("#coreTitle");
-
-  const coreDate =
-    $("#coreDate");
-
-  const currentMemoryNumber =
-    $("#currentMemoryNumber");
-
-  const totalMemoryNumber =
-    $("#totalMemoryNumber");
-
-
-  const previousMemoryButton =
-    $("#previousMemoryButton");
-
-  const nextMemoryButton =
-    $("#nextMemoryButton");
-
-
-  const memoryCount =
-    $("#memoryCount");
-
-  const dayCount =
-    $("#dayCount");
-
-  const placeCount =
-    $("#placeCount");
-
-
-  const randomMemoryButton =
-    $("#randomMemoryButton");
-
-  const randomMemoryCard =
-    $("#randomMemoryCard");
-
-
-  const miniTimeline =
-    $("#miniTimeline");
-
-  const timelineList =
-    $("#timelineList");
+  const featuredGrid =
+    $("#featuredGrid");
 
   const galleryGrid =
     $("#galleryGrid");
 
+  const fullCoreNodes =
+    $("#fullCoreNodes");
 
-  const expandedCoreNodes =
-    $("#expandedCoreNodes");
+  const randomMemoryButton =
+    $("#randomMemoryButton");
 
-  const expandedCoreCenter =
-    $("#expandedCoreCenter");
-
-  const expandedCoreImage =
-    $("#expandedCoreImage");
-
-  const expandedCoreTitle =
-    $("#expandedCoreTitle");
-
-  const expandedCoreDate =
-    $("#expandedCoreDate");
-
-  const expandedCoreLocation =
-    $("#expandedCoreLocation");
+  const galleryRandomButton =
+    $("#galleryRandomButton");
 
 
-  const memoryModal =
-    $("#memoryModal");
+  /* FOCUS */
 
-  const modalBackdrop =
-    $("#modalBackdrop");
+  const focusOverlay =
+    $("#focusOverlay");
 
-  const closeMemoryButton =
-    $("#closeMemoryButton");
+  const focusBackdrop =
+    $("#focusBackdrop");
 
-  const detailImage =
-    $("#detailImage");
+  const focusCloseButton =
+    $("#focusCloseButton");
 
-  const detailIndex =
-    $("#detailIndex");
+  const focusPhoto =
+    $("#focusPhoto");
 
-  const detailTotal =
-    $("#detailTotal");
+  const focusImage =
+    $("#focusImage");
 
-  const detailDate =
-    $("#detailDate");
+  const focusCurrentNumber =
+    $("#focusCurrentNumber");
 
-  const detailLocation =
-    $("#detailLocation");
+  const focusTotalNumber =
+    $("#focusTotalNumber");
 
-  const detailTitle =
-    $("#detailTitle");
+  const focusTitle =
+    $("#focusTitle");
 
-  const detailCaption =
-    $("#detailCaption");
+  const focusDate =
+    $("#focusDate");
 
-  const detailTags =
-    $("#detailTags");
+  const focusCaption =
+    $("#focusCaption");
 
-  const detailPreviousButton =
-    $("#detailPreviousButton");
+  const focusTags =
+    $("#focusTags");
 
-  const detailNextButton =
-    $("#detailNextButton");
+  const focusPreviousButton =
+    $("#focusPreviousButton");
 
-  const favoriteButton =
-    $("#favoriteButton");
+  const focusNextButton =
+    $("#focusNextButton");
+
+  const focusFavoriteButton =
+    $("#focusFavoriteButton");
+
+  const transitionLayer =
+    $("#transitionLayer");
 
 
-  /* =========================================
-     DATE
-  ========================================= */
+  /* =========================================================
+     STATE
+  ========================================================= */
 
-  function getDateObject(memory) {
+  let currentMemoryIndex = 0;
 
-    return new Date(
-      `${memory.date}T12:00:00`
-    );
+  let galleryFilter = "all";
 
-  }
+  let activeSourceElement = null;
 
+  let isAnimating = false;
+
+
+  /* =========================================================
+     DATE FORMAT
+  ========================================================= */
 
   function formatDate(memory) {
-
-    return getDateObject(memory)
-      .toLocaleDateString(
-        "id-ID",
-        {
-          day: "2-digit",
-          month: "short",
-          year: "numeric"
-        }
+    const date =
+      new Date(
+        `${memory.date}T12:00:00`
       );
 
-  }
-
-
-  function getMonthName(
-    monthIndex
-  ) {
-
-    return new Date(
-      2026,
-      monthIndex,
-      1
-    ).toLocaleDateString(
-      "id-ID",
+    return new Intl.DateTimeFormat(
+      "en-US",
       {
-        month: "short"
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
       }
-    );
-
+    )
+      .format(date)
+      .toUpperCase();
   }
 
 
-  /* =========================================
-     VIEW NAVIGATION
-  ========================================= */
+  /* =========================================================
+     NAVIGATION
+  ========================================================= */
 
-  function showView(name) {
-
-    activeView =
-      name;
-
-
-    views.forEach((view) => {
-
+  function showView(viewName) {
+    $$(".view").forEach((view) => {
       view.classList.toggle(
         "is-active",
-        view.dataset.viewPanel ===
-          name
+        view.dataset.viewPanel === viewName
       );
-
     });
 
 
-    navigationButtons.forEach(
-      (button) => {
-
-        button.classList.toggle(
-          "is-active",
-          button.dataset.view ===
-            name
-        );
-
-      }
-    );
+    $$("[data-view]").forEach((button) => {
+      button.classList.toggle(
+        "is-active",
+        button.dataset.view === viewName
+      );
+    });
 
 
     window.scrollTo({
       top: 0,
       behavior: "smooth"
     });
-
   }
 
 
-  navigationButtons.forEach(
-    (button) => {
+  $$("[data-view]").forEach((button) => {
+    button.addEventListener(
+      "click",
+      () => {
+        showView(
+          button.dataset.view
+        );
+      }
+    );
+  });
 
-      button.addEventListener(
-        "click",
-        () => {
 
-          const target =
-            button.dataset.view;
+  brandButton?.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
 
-          if (!target) {
-            return;
-          }
-
-          showView(target);
-
-        }
-      );
-
+      showView("home");
     }
   );
 
 
-  $("#brandButton")
-    ?.addEventListener(
-      "click",
-      (event) => {
+  /* =========================================================
+     ORBIT POSITIONS
+  ========================================================= */
 
-        event.preventDefault();
+  const orbitPositions = [
+    [11, 31],
+    [22, 68],
+    [34, 19],
+    [50, 11],
+    [67, 20],
+    [87, 34],
+    [79, 69],
+    [62, 82]
+  ];
 
-        showView("home");
 
+  /* =========================================================
+     CREATE IMAGE
+  ========================================================= */
+
+  function createImage(memory) {
+    const image =
+      document.createElement("img");
+
+    image.src =
+      memory.image;
+
+    image.alt =
+      memory.title;
+
+    image.loading =
+      "lazy";
+
+    return image;
+  }
+
+
+  /* =========================================================
+     HOME ORBIT
+  ========================================================= */
+
+  function renderOrbitNodes() {
+    orbitNodes.innerHTML = "";
+
+    const visibleMemories =
+      memories.slice(-8);
+
+    const startIndex =
+      memories.length -
+      visibleMemories.length;
+
+
+    visibleMemories.forEach(
+      (memory, localIndex) => {
+        const realIndex =
+          startIndex + localIndex;
+
+        const position =
+          orbitPositions[
+            localIndex %
+            orbitPositions.length
+          ];
+
+
+        const node =
+          document.createElement(
+            "button"
+          );
+
+        node.type =
+          "button";
+
+        node.className =
+          "memory-node";
+
+        node.dataset.index =
+          realIndex;
+
+        node.style.left =
+          `${position[0]}%`;
+
+        node.style.top =
+          `${position[1]}%`;
+
+
+        const image =
+          createImage(memory);
+
+        node.appendChild(image);
+
+
+        const number =
+          document.createElement(
+            "span"
+          );
+
+        number.className =
+          "memory-node__index";
+
+        number.textContent =
+          pad(realIndex + 1);
+
+        node.appendChild(number);
+
+
+        node.addEventListener(
+          "click",
+          () => {
+            openMemory(
+              realIndex,
+              node
+            );
+          }
+        );
+
+
+        orbitNodes.appendChild(
+          node
+        );
       }
+    );
+  }
+
+
+  /* =========================================================
+     FEATURED MEMORIES
+  ========================================================= */
+
+  function renderFeatured() {
+    featuredGrid.innerHTML = "";
+
+    const featuredIndexes = [
+      memories.length - 1,
+      memories.length - 3,
+      memories.length - 5
+    ];
+
+
+    featuredIndexes.forEach(
+      (memoryIndex) => {
+        const memory =
+          memories[memoryIndex];
+
+        if (!memory) {
+          return;
+        }
+
+
+        const card =
+          document.createElement(
+            "button"
+          );
+
+        card.type =
+          "button";
+
+        card.className =
+          "featured-card";
+
+        card.dataset.index =
+          memoryIndex;
+
+
+        const image =
+          createImage(memory);
+
+        card.appendChild(image);
+
+
+        const info =
+          document.createElement(
+            "span"
+          );
+
+        info.className =
+          "featured-card__info";
+
+
+        const date =
+          document.createElement(
+            "small"
+          );
+
+        date.textContent =
+          formatDate(memory);
+
+
+        const title =
+          document.createElement(
+            "strong"
+          );
+
+        title.textContent =
+          memory.title;
+
+
+        info.appendChild(date);
+        info.appendChild(title);
+
+        card.appendChild(info);
+
+
+        card.addEventListener(
+          "click",
+          () => {
+            openMemory(
+              memoryIndex,
+              card
+            );
+          }
+        );
+
+
+        featuredGrid.appendChild(
+          card
+        );
+      }
+    );
+  }
+
+
+  /* =========================================================
+     GALLERY
+  ========================================================= */
+
+  function getFilteredMemories() {
+    return memories
+      .map(
+        (memory, index) => ({
+          memory,
+          index
+        })
+      )
+      .filter(({ memory }) => {
+        if (
+          galleryFilter ===
+          "favorite"
+        ) {
+          return memory.favorite;
+        }
+
+        return true;
+      });
+  }
+
+
+  function renderGallery() {
+    galleryGrid.innerHTML = "";
+
+    const filtered =
+      getFilteredMemories();
+
+
+    filtered.forEach(
+      ({ memory, index }) => {
+        const card =
+          document.createElement(
+            "button"
+          );
+
+        card.type =
+          "button";
+
+        card.className =
+          "gallery-card";
+
+        card.dataset.index =
+          index;
+
+
+        const image =
+          createImage(memory);
+
+        card.appendChild(image);
+
+
+        if (memory.favorite) {
+          const favorite =
+            document.createElement(
+              "span"
+            );
+
+          favorite.className =
+            "gallery-card__favorite";
+
+          favorite.textContent =
+            "♥";
+
+          card.appendChild(
+            favorite
+          );
+        }
+
+
+        const info =
+          document.createElement(
+            "span"
+          );
+
+        info.className =
+          "gallery-card__info";
+
+
+        const date =
+          document.createElement(
+            "small"
+          );
+
+        date.textContent =
+          formatDate(memory);
+
+
+        const title =
+          document.createElement(
+            "strong"
+          );
+
+        title.textContent =
+          memory.title;
+
+
+        info.appendChild(date);
+        info.appendChild(title);
+
+        card.appendChild(info);
+
+
+        card.addEventListener(
+          "click",
+          () => {
+            openMemory(
+              index,
+              card
+            );
+          }
+        );
+
+
+        galleryGrid.appendChild(
+          card
+        );
+      }
+    );
+  }
+
+
+  $$(".filter-button").forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          galleryFilter =
+            button.dataset.filter;
+
+
+          $$(".filter-button").forEach(
+            (item) => {
+              item.classList.toggle(
+                "is-active",
+                item === button
+              );
+            }
+          );
+
+
+          renderGallery();
+        }
+      );
+    }
+  );
+
+
+  /* =========================================================
+     FULL MEMORY CORE
+  ========================================================= */
+
+  const fullCorePositions = [
+    [8, 39],
+    [18, 70],
+    [31, 17],
+    [48, 9],
+    [67, 16],
+    [88, 37],
+    [82, 70],
+    [61, 84]
+  ];
+
+
+  function renderFullCore() {
+    fullCoreNodes.innerHTML = "";
+
+    const visibleMemories =
+      memories.slice(-8);
+
+    const startIndex =
+      memories.length -
+      visibleMemories.length;
+
+
+    visibleMemories.forEach(
+      (memory, localIndex) => {
+        const realIndex =
+          startIndex + localIndex;
+
+        const position =
+          fullCorePositions[
+            localIndex %
+            fullCorePositions.length
+          ];
+
+
+        const node =
+          document.createElement(
+            "button"
+          );
+
+        node.type =
+          "button";
+
+        node.className =
+          "full-core-node";
+
+        node.dataset.index =
+          realIndex;
+
+        node.style.left =
+          `${position[0]}%`;
+
+        node.style.top =
+          `${position[1]}%`;
+
+
+        node.appendChild(
+          createImage(memory)
+        );
+
+
+        node.addEventListener(
+          "click",
+          () => {
+            openMemory(
+              realIndex,
+              node
+            );
+          }
+        );
+
+
+        fullCoreNodes.appendChild(
+          node
+        );
+      }
+    );
+  }
+
+
+  /* =========================================================
+     UPDATE FOCUS CONTENT
+  ========================================================= */
+
+  function updateFocusContent(index) {
+    const memory =
+      memories[index];
+
+    if (!memory) {
+      return;
+    }
+
+
+    currentMemoryIndex =
+      index;
+
+
+    focusImage.src =
+      memory.image;
+
+    focusImage.alt =
+      memory.title;
+
+
+    focusCurrentNumber.textContent =
+      pad(index + 1);
+
+    focusTotalNumber.textContent =
+      pad(memories.length);
+
+
+    focusTitle.textContent =
+      memory.title;
+
+    focusDate.textContent =
+      formatDate(memory);
+
+    focusCaption.textContent =
+      memory.caption;
+
+
+    focusTags.innerHTML = "";
+
+    memory.tags.forEach((tag) => {
+      const tagElement =
+        document.createElement(
+          "span"
+        );
+
+      tagElement.textContent =
+        `#${tag}`;
+
+      focusTags.appendChild(
+        tagElement
+      );
+    });
+
+
+    focusFavoriteButton
+      .classList.toggle(
+        "is-favorite",
+        memory.favorite
+      );
+
+
+    focusFavoriteButton.textContent =
+      memory.favorite
+        ? "♥"
+        : "♡";
+  }
+
+
+  /* =========================================================
+     MUTE ORBIT NODES
+
+     Saat satu foto dipilih,
+     foto lain sedikit redup.
+  ========================================================= */
+
+  function muteNodes(
+    selectedElement = null
+  ) {
+    $$(".memory-node, .full-core-node")
+      .forEach((node) => {
+        if (
+          node !== selectedElement
+        ) {
+          node.classList.add(
+            "is-muted"
+          );
+        }
+      });
+  }
+
+
+  function restoreNodes() {
+    $$(".memory-node, .full-core-node")
+      .forEach((node) => {
+        node.classList.remove(
+          "is-muted"
+        );
+      });
+  }
+
+
+  /* =========================================================
+     GET IMAGE FROM SOURCE
+  ========================================================= */
+
+  function getSourceImage(element) {
+    if (!element) {
+      return null;
+    }
+
+    if (
+      element.tagName === "IMG"
+    ) {
+      return element;
+    }
+
+    return $("img", element);
+  }
+
+
+  /* =========================================================
+     CREATE FLYING PHOTO
+
+     Ini inti animasi zoom.
+  ========================================================= */
+
+  function createFlyingPhoto(
+    sourceElement,
+    memory
+  ) {
+    const sourceImage =
+      getSourceImage(
+        sourceElement
+      );
+
+    if (!sourceImage) {
+      return null;
+    }
+
+
+    const sourceRect =
+      sourceImage
+        .getBoundingClientRect();
+
+
+    const flying =
+      document.createElement(
+        "div"
+      );
+
+    flying.className =
+      "flying-photo";
+
+
+    flying.style.left =
+      `${sourceRect.left}px`;
+
+    flying.style.top =
+      `${sourceRect.top}px`;
+
+    flying.style.width =
+      `${sourceRect.width}px`;
+
+    flying.style.height =
+      `${sourceRect.height}px`;
+
+
+    const image =
+      document.createElement(
+        "img"
+      );
+
+    image.src =
+      memory.image;
+
+    image.alt = "";
+
+
+    flying.appendChild(image);
+
+    transitionLayer.appendChild(
+      flying
     );
 
 
-  /* =========================================
-     SELECT MEMORY
-  ========================================= */
+    return {
+      element: flying,
+      sourceRect
+    };
+  }
 
-  function selectMemory(
+
+  /* =========================================================
+     OPEN MEMORY
+  ========================================================= */
+
+  async function openMemory(
     index,
-    open = false
+    sourceElement = null
   ) {
+    if (isAnimating) {
+      return;
+    }
+
 
     if (
       index < 0 ||
@@ -659,27 +1112,192 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    isAnimating = true;
+
     currentMemoryIndex =
       index;
 
-
-    updateCore();
-
-    updateExpandedCore();
+    activeSourceElement =
+      sourceElement;
 
 
-    if (open) {
-      openMemory(index);
+    const memory =
+      memories[index];
+
+
+    updateFocusContent(index);
+
+
+    /*
+      Kalau dibuka dari Random,
+      keyboard navigation,
+      atau sumber elemen tidak ada,
+      pakai fade biasa.
+    */
+
+    if (!sourceElement) {
+      focusOverlay.classList.add(
+        "is-open"
+      );
+
+      focusOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add(
+        "focus-open"
+      );
+
+      await wait(450);
+
+      isAnimating = false;
+
+      return;
     }
 
+
+    muteNodes(sourceElement);
+
+
+    const flyingData =
+      createFlyingPhoto(
+        sourceElement,
+        memory
+      );
+
+
+    if (!flyingData) {
+      focusOverlay.classList.add(
+        "is-open"
+      );
+
+      focusOverlay.setAttribute(
+              "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add(
+        "focus-open"
+      );
+
+      restoreNodes();
+
+      isAnimating = false;
+
+      return;
+    }
+
+
+    const flying =
+      flyingData.element;
+
+
+    /*
+      Overlay masuk lebih dulu,
+      tapi foto utama disembunyikan
+      sementara selama animasi.
+    */
+
+    focusOverlay.classList.add(
+      "is-open"
+    );
+
+    focusOverlay.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    document.body.classList.add(
+      "focus-open"
+    );
+
+
+    focusImage.style.opacity =
+      "0";
+
+
+    /*
+      Kasih browser waktu untuk
+      menggambar posisi awal foto.
+    */
+
+    await new Promise(
+      (resolve) => {
+        requestAnimationFrame(
+          () => {
+            requestAnimationFrame(
+              resolve
+            );
+          }
+        );
+      }
+    );
+
+
+    const targetRect =
+      focusPhoto
+        .getBoundingClientRect();
+
+
+    /*
+      Foto bulat bergerak menuju
+      focus view dan membesar.
+    */
+
+    flying.style.left =
+      `${targetRect.left}px`;
+
+    flying.style.top =
+      `${targetRect.top}px`;
+
+    flying.style.width =
+      `${targetRect.width}px`;
+
+    flying.style.height =
+      `${targetRect.height}px`;
+
+    flying.style.borderRadius =
+      "0px";
+
+    flying.style.boxShadow =
+      "0 35px 100px rgba(45,42,65,.18)";
+
+
+    await wait(720);
+
+
+    focusImage.style.opacity =
+      "1";
+
+    flying.remove();
+
+    restoreNodes();
+
+    isAnimating = false;
   }
 
 
-  /* =========================================
-     UPDATE CORE
-  ========================================= */
+  /* =========================================================
+     CLOSE MEMORY WITH REVERSE ANIMATION
+  ========================================================= */
 
-  function updateCore() {
+  async function closeMemory() {
+    if (isAnimating) {
+      return;
+    }
+
+
+    if (
+      !focusOverlay.classList
+        .contains("is-open")
+    ) {
+      return;
+    }
+
+
+    isAnimating = true;
+
 
     const memory =
       memories[
@@ -687,160 +1305,205 @@ document.addEventListener("DOMContentLoaded", () => {
       ];
 
 
-    if (!memory) {
+    /*
+      Cari foto asal supaya animasi
+      bisa kembali ke tempat semula.
+    */
+
+    let destination =
+      activeSourceElement;
+
+
+    if (
+      !destination ||
+      !document.body.contains(
+        destination
+      )
+    ) {
+      destination =
+        document.querySelector(
+          `.memory-node[data-index="${currentMemoryIndex}"],
+           .full-core-node[data-index="${currentMemoryIndex}"],
+           .gallery-card[data-index="${currentMemoryIndex}"],
+           .featured-card[data-index="${currentMemoryIndex}"]`
+        );
+    }
+
+
+    const destinationImage =
+      getSourceImage(destination);
+
+
+    /*
+      Kalau foto asal sudah tidak ada,
+      cukup fade keluar.
+    */
+
+    if (!destinationImage) {
+      focusOverlay.classList.remove(
+        "is-open"
+      );
+
+      focusOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.classList.remove(
+        "focus-open"
+      );
+
+      activeSourceElement = null;
+
+      await wait(400);
+
+      isAnimating = false;
+
       return;
     }
 
 
-    coreImage.src =
+    const startRect =
+      focusPhoto
+        .getBoundingClientRect();
+
+    const destinationRect =
+      destinationImage
+        .getBoundingClientRect();
+
+
+    const flying =
+      document.createElement(
+        "div"
+      );
+
+    flying.className =
+      "flying-photo";
+
+
+    flying.style.left =
+      `${startRect.left}px`;
+
+    flying.style.top =
+      `${startRect.top}px`;
+
+    flying.style.width =
+      `${startRect.width}px`;
+
+    flying.style.height =
+      `${startRect.height}px`;
+
+    flying.style.borderRadius =
+      "0px";
+
+
+    const image =
+      document.createElement(
+        "img"
+      );
+
+    image.src =
       memory.image;
 
-    coreImage.alt =
-      memory.title;
-
-    coreTitle.textContent =
-      memory.title;
-
-    coreDate.textContent =
-      formatDate(memory);
-
-    currentMemoryNumber.textContent =
-      pad(
-        currentMemoryIndex + 1
-      );
-
-    totalMemoryNumber.textContent =
-      pad(memories.length);
+    image.alt = "";
 
 
-    $$(".memory-node")
-      .forEach(
-        (node) => {
+    flying.appendChild(image);
 
-          node.classList.toggle(
-            "is-active",
-            Number(
-              node.dataset.index
-            ) ===
-              currentMemoryIndex
-          );
-
-        }
-      );
-
-  }
+    transitionLayer.appendChild(
+      flying
+    );
 
 
-  /* =========================================
-     HOME NODES
-  ========================================= */
-
-  const nodePositions = [
-
-    [11, 24],
-    [24, 67],
-    [37, 18],
-    [66, 18],
-    [82, 33],
-    [77, 70],
-    [60, 78],
-    [32, 81]
-
-  ];
+    focusImage.style.opacity =
+      "0";
 
 
-  function renderMemoryNodes() {
-
-    memoryNodes.innerHTML =
-      "";
-
-
-    const visibleMemories =
-      memories.slice(-8);
+    focusOverlay.classList.remove(
+      "is-open"
+    );
 
 
-    const startIndex =
-      memories.length -
-      visibleMemories.length;
-
-
-    visibleMemories.forEach(
-      (memory, localIndex) => {
-
-        const realIndex =
-          startIndex +
-          localIndex;
-
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-
-        button.type =
-          "button";
-
-        button.className =
-          "memory-node";
-
-        button.dataset.index =
-          realIndex;
-
-
-        const position =
-          nodePositions[
-            localIndex %
-            nodePositions.length
-          ];
-
-
-        button.style.left =
-          `${position[0]}%`;
-
-        button.style.top =
-          `${position[1]}%`;
-
-
-        button.innerHTML = `
-          <img
-            src="${memory.image}"
-            alt="${memory.title}"
-          >
-        `;
-
-
-        button.addEventListener(
-          "click",
+    await new Promise(
+      (resolve) => {
+        requestAnimationFrame(
           () => {
-
-            selectMemory(
-              realIndex
+            requestAnimationFrame(
+              resolve
             );
-
           }
         );
-
-
-        memoryNodes.appendChild(
-          button
-        );
-
       }
     );
 
+
+    /*
+      Foto besar balik ke
+      posisi foto asal.
+    */
+
+    flying.style.left =
+      `${destinationRect.left}px`;
+
+    flying.style.top =
+      `${destinationRect.top}px`;
+
+    flying.style.width =
+      `${destinationRect.width}px`;
+
+    flying.style.height =
+      `${destinationRect.height}px`;
+
+    flying.style.borderRadius =
+      "50%";
+
+    flying.style.boxShadow =
+      "0 12px 32px rgba(40,40,55,.11)";
+
+
+    await wait(720);
+
+
+    flying.remove();
+
+
+    focusImage.style.opacity =
+      "1";
+
+
+    focusOverlay.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+    document.body.classList.remove(
+      "focus-open"
+    );
+
+
+    restoreNodes();
+
+
+    activeSourceElement =
+      null;
+
+
+    isAnimating = false;
   }
 
 
-  /* =========================================
-     PREVIOUS / NEXT
-  ========================================= */
+  /* =========================================================
+     NEXT / PREVIOUS
+  ========================================================= */
 
-  function previousMemory(
-    open = false
-  ) {
+  function showPreviousMemory() {
+    if (isAnimating) {
+      return;
+    }
 
-    const index =
+
+    currentMemoryIndex =
       (
         currentMemoryIndex -
         1 +
@@ -849,19 +1512,24 @@ document.addEventListener("DOMContentLoaded", () => {
       memories.length;
 
 
-    selectMemory(
-      index,
-      open
-    );
+    activeSourceElement =
+      null;
 
+
+    animateFocusChange(
+      currentMemoryIndex,
+      "previous"
+    );
   }
 
 
-  function nextMemory(
-    open = false
-  ) {
+  function showNextMemory() {
+    if (isAnimating) {
+      return;
+    }
 
-    const index =
+
+    currentMemoryIndex =
       (
         currentMemoryIndex +
         1
@@ -869,155 +1537,244 @@ document.addEventListener("DOMContentLoaded", () => {
       memories.length;
 
 
-    selectMemory(
-      index,
-      open
-    );
+    activeSourceElement =
+      null;
 
+
+    animateFocusChange(
+      currentMemoryIndex,
+      "next"
+    );
   }
 
 
-  previousMemoryButton
-    ?.addEventListener(
-      "click",
-      () => {
+  /* =========================================================
+     SMOOTH CHANGE INSIDE FOCUS
+  ========================================================= */
 
-        previousMemory();
-
-      }
-    );
-
-
-  nextMemoryButton
-    ?.addEventListener(
-      "click",
-      () => {
-
-        nextMemory();
-
-      }
-    );
-
-
-  memoryCore
-    ?.addEventListener(
-      "click",
-      () => {
-
-        openMemory(
-          currentMemoryIndex
-        );
-
-      }
-    );
-
-
-  /* =========================================
-     STATS
-  ========================================= */
-
-  function renderStats() {
-
-    memoryCount.textContent =
-      memories.length;
-
-
-    const places =
-      new Set(
-        memories
-          .map(
-            (memory) =>
-              memory.location
-          )
-          .filter(Boolean)
-      );
-
-
-    placeCount.textContent =
-      places.size;
-
-
-    if (
-      memories.length > 1
-    ) {
-
-      const first =
-        getDateObject(
-          memories[0]
-        );
-
-      const last =
-        getDateObject(
-          memories[
-            memories.length - 1
-          ]
-        );
-
-
-      const difference =
-        Math.round(
-          (
-            last -
-            first
-          ) /
-          86400000
-        );
-
-
-      dayCount.textContent =
-        Math.max(
-          1,
-          difference
-        );
-
-    } else {
-
-      dayCount.textContent =
-        "1";
-
-    }
-
-  }
-
-
-  /* =========================================
-     RANDOM
-  ========================================= */
-
-  function openRandomMemory() {
-
-    if (!memories.length) {
+  async function animateFocusChange(
+    index,
+    direction
+  ) {
+    if (isAnimating) {
       return;
     }
 
 
-    let randomIndex =
-      currentMemoryIndex;
+    isAnimating = true;
 
 
-    if (memories.length > 1) {
+    const offset =
+      direction === "next"
+        ? -22
+        : 22;
 
-      while (
-        randomIndex ===
-        currentMemoryIndex
-      ) {
 
-        randomIndex =
-          Math.floor(
-            Math.random() *
-            memories.length
+    focusImage.style.transition =
+      "opacity .25s ease, transform .35s cubic-bezier(.22,1,.36,1)";
+
+    focusImage.style.opacity =
+      "0";
+
+    focusImage.style.transform =
+      `translateX(${offset}px) scale(1.02)`;
+
+
+    focusTitle.style.transition =
+      "opacity .2s ease, transform .3s cubic-bezier(.22,1,.36,1)";
+
+    focusCaption.style.transition =
+      "opacity .2s ease, transform .3s cubic-bezier(.22,1,.36,1)";
+
+
+    focusTitle.style.opacity =
+      "0";
+
+    focusCaption.style.opacity =
+      "0";
+
+
+    focusTitle.style.transform =
+      `translateX(${offset}px)`;
+
+    focusCaption.style.transform =
+      `translateX(${offset}px)`;
+
+
+    await wait(260);
+
+
+    updateFocusContent(index);
+
+
+    const enterOffset =
+      direction === "next"
+        ? 22
+        : -22;
+
+
+    focusImage.style.transition =
+      "none";
+
+    focusTitle.style.transition =
+      "none";
+
+    focusCaption.style.transition =
+      "none";
+
+
+    focusImage.style.transform =
+      `translateX(${enterOffset}px) scale(1.02)`;
+
+    focusTitle.style.transform =
+      `translateX(${enterOffset}px)`;
+
+    focusCaption.style.transform =
+      `translateX(${enterOffset}px)`;
+
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        focusImage.style.transition =
+          "opacity .35s ease, transform .55s cubic-bezier(.22,1,.36,1)";
+
+        focusTitle.style.transition =
+          "opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1)";
+
+        focusCaption.style.transition =
+          "opacity .3s ease .04s, transform .5s cubic-bezier(.22,1,.36,1)";
+
+
+        focusImage.style.opacity =
+          "1";
+
+        focusTitle.style.opacity =
+          "1";
+
+        focusCaption.style.opacity =
+          "1";
+
+
+        focusImage.style.transform =
+          "translateX(0) scale(1)";
+
+        focusTitle.style.transform =
+          "translateX(0)";
+
+        focusCaption.style.transform =
+          "translateX(0)";
+      });
+    });
+
+
+    await wait(560);
+
+
+    isAnimating = false;
+  }
+
+
+  /* =========================================================
+     FAVORITE
+  ========================================================= */
+
+  focusFavoriteButton
+    ?.addEventListener(
+      "click",
+      () => {
+        const memory =
+          memories[
+            currentMemoryIndex
+          ];
+
+
+        memory.favorite =
+          !memory.favorite;
+
+
+        focusFavoriteButton
+          .classList.toggle(
+            "is-favorite",
+            memory.favorite
           );
 
-      }
 
+        focusFavoriteButton.textContent =
+          memory.favorite
+            ? "♥"
+            : "♡";
+
+
+        renderGallery();
+      }
+    );
+
+
+  /* =========================================================
+     FOCUS CONTROLS
+  ========================================================= */
+
+  focusPreviousButton
+    ?.addEventListener(
+      "click",
+      showPreviousMemory
+    );
+
+
+  focusNextButton
+    ?.addEventListener(
+      "click",
+      showNextMemory
+    );
+
+
+  focusCloseButton
+    ?.addEventListener(
+      "click",
+      closeMemory
+    );
+
+
+  focusBackdrop
+    ?.addEventListener(
+      "click",
+      closeMemory
+    );
+
+
+  /* =========================================================
+     RANDOM MEMORY
+  ========================================================= */
+
+  function openRandomMemory() {
+    let randomIndex =
+      Math.floor(
+        Math.random() *
+        memories.length
+      );
+
+
+    if (
+      memories.length > 1 &&
+      randomIndex ===
+        currentMemoryIndex
+    ) {
+      randomIndex =
+        (
+          randomIndex + 1
+        ) %
+        memories.length;
     }
 
 
-    selectMemory(
-      randomIndex,
-      true
-    );
+    activeSourceElement =
+      null;
 
+
+    openMemory(
+      randomIndex,
+      null
+    );
   }
 
 
@@ -1028,846 +1785,211 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  randomMemoryCard
+  galleryRandomButton
     ?.addEventListener(
       "click",
       openRandomMemory
     );
 
 
-  /* =========================================
-     MINI TIMELINE
-  ========================================= */
+  /* =========================================================
+     KEYBOARD
+  ========================================================= */
 
-  function renderMiniTimeline() {
-
-    miniTimeline.innerHTML =
-      "";
-
-
-    const months =
-      Array.from(
-        {
-          length: 12
-        },
-        (_, index) => index
-      );
-
-
-    months.forEach(
-      (monthIndex) => {
-
-        const memoriesInMonth =
-          memories.filter(
-            (memory) =>
-              getDateObject(memory)
-                .getMonth() ===
-              monthIndex
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      const focusIsOpen =
+        focusOverlay
+          .classList
+          .contains(
+            "is-open"
           );
 
 
-        const button =
-          document.createElement(
-            "button"
-          );
+      if (!focusIsOpen) {
+        return;
+      }
 
 
-        button.type =
-          "button";
+      if (
+        event.key ===
+        "Escape"
+      ) {
+        closeMemory();
 
-        button.className =
-          "timeline-month";
-
-
-        if (
-          memoriesInMonth.length
-        ) {
-
-          button.classList.add(
-            "has-memory"
-          );
-
-        }
+        return;
+      }
 
 
-        const currentMonth =
-          getDateObject(
-            memories[
-              currentMemoryIndex
-            ]
-          ).getMonth();
+      if (
+        event.key ===
+        "ArrowLeft"
+      ) {
+        showPreviousMemory();
+
+        return;
+      }
 
 
-        if (
-          currentMonth ===
-          monthIndex
-        ) {
-
-          button.classList.add(
-            "is-active"
-          );
-
-        }
+      if (
+        event.key ===
+        "ArrowRight"
+      ) {
+        showNextMemory();
+      }
+    }
+  );
 
 
-        button.innerHTML = `
-          <i></i>
-          <span>
-            ${getMonthName(
-              monthIndex
-            )}
-          </span>
-        `;
+  /* =========================================================
+     MOBILE SWIPE
+  ========================================================= */
+
+  let touchStartX = 0;
+
+  let touchStartY = 0;
 
 
-        button.addEventListener(
-          "click",
-          () => {
+  focusPhoto
+    ?.addEventListener(
+      "touchstart",
+      (event) => {
+        const touch =
+          event.changedTouches[0];
 
-            if (
-              !memoriesInMonth.length
-            ) {
-              return;
-            }
+        touchStartX =
+          touch.clientX;
 
-
-            const memory =
-              memoriesInMonth[
-                memoriesInMonth.length -
-                1
-              ];
-
-
-            const index =
-              memories.findIndex(
-                (item) =>
-                  item.id ===
-                  memory.id
-              );
-
-
-            selectMemory(index);
-
-            renderMiniTimeline();
-
-          }
-        );
-
-
-        miniTimeline.appendChild(
-          button
-        );
-
+        touchStartY =
+          touch.clientY;
+      },
+      {
+        passive: true
       }
     );
 
-  }
+
+  focusPhoto
+    ?.addEventListener(
+      "touchend",
+      (event) => {
+        const touch =
+          event.changedTouches[0];
 
 
-  /* =========================================
-     TIMELINE PAGE
-  ========================================= */
+        const deltaX =
+          touch.clientX -
+          touchStartX;
 
-  function renderTimeline() {
-
-    timelineList.innerHTML =
-      "";
-
-
-    const sorted =
-      memories
-        .map(
-          (
-            memory,
-            index
-          ) => ({
-            memory,
-            index
-          })
-        )
-        .reverse();
+        const deltaY =
+          touch.clientY -
+          touchStartY;
 
 
-    sorted.forEach(
-      ({
-        memory,
-        index
-      }) => {
-
-        const article =
-          document.createElement(
-            "article"
-          );
+        if (
+          Math.abs(deltaY) >
+          Math.abs(deltaX)
+        ) {
+          return;
+        }
 
 
-        article.className =
-          "timeline-entry";
+        if (
+          Math.abs(deltaX) <
+          55
+        ) {
+          return;
+        }
 
 
-        article.innerHTML = `
-
-          <div
-            class="timeline-entry__date"
-          >
-            ${formatDate(memory)}
-          </div>
-
-          <span
-            class="timeline-entry__dot"
-          ></span>
-
-          <button
-            class="timeline-entry__card"
-            type="button"
-          >
-
-            <img
-              src="${memory.image}"
-              alt="${memory.title}"
-            >
-
-            <div>
-
-              <small>
-                ${memory.location}
-              </small>
-
-              <h3>
-                ${memory.title}
-              </h3>
-
-              <p>
-                ${memory.caption}
-              </p>
-
-            </div>
-
-          </button>
-
-        `;
-
-
-        article
-          .querySelector(
-            "button"
-          )
-          .addEventListener(
-            "click",
-            () => {
-
-              selectMemory(
-                index,
-                true
-              );
-
-            }
-          );
-
-
-        timelineList.appendChild(
-          article
-        );
-
+        if (deltaX < 0) {
+          showNextMemory();
+        } else {
+          showPreviousMemory();
+        }
+      },
+      {
+        passive: true
       }
     );
 
-  }
+
+  /* =========================================================
+     IMAGE ERROR FALLBACK
+  ========================================================= */
+
+  document.addEventListener(
+    "error",
+    (event) => {
+      const target =
+        event.target;
 
 
-  /* =========================================
-     GALLERY
-  ========================================= */
-
-  function renderGallery() {
-
-    galleryGrid.innerHTML =
-      "";
+      if (
+        !(target instanceof HTMLImageElement)
+      ) {
+        return;
+      }
 
 
-    let filtered =
-      memories
-        .map(
-          (
-            memory,
-            index
-          ) => ({
-            memory,
-            index
-          })
-        );
+      if (
+        target.dataset.fallback ===
+        "true"
+      ) {
+        return;
+      }
 
 
-    if (
-      galleryFilter ===
-      "favorite"
-    ) {
-
-      filtered =
-        filtered.filter(
-          ({ memory }) =>
-            memory.favorite
-        );
-
-    }
+      target.dataset.fallback =
+        "true";
 
 
-    if (
-      galleryFilter ===
-      "2026"
-    ) {
-
-      filtered =
-        filtered.filter(
-          ({ memory }) =>
-            memory.date
-              .startsWith(
-                "2026"
-              )
-        );
-
-    }
+      target.src =
+        "https://picsum.photos/seed/senn-memory-fallback/1200/1500";
+    },
+    true
+  );
 
 
-    filtered
-      .reverse()
+  /* =========================================================
+     PRELOAD
+  ========================================================= */
+
+  function preloadImages() {
+    memories
+      .slice(0, 6)
       .forEach(
-        ({
-          memory,
-          index
-        }) => {
+        (memory) => {
+          const image =
+            new Image();
 
-          const card =
-            document.createElement(
-              "button"
-            );
-
-
-          card.type =
-            "button";
-
-          card.className =
-            "gallery-card";
-
-
-          card.innerHTML = `
-
-            <img
-              src="${memory.image}"
-              alt="${memory.title}"
-              loading="lazy"
-            >
-
-${
-  memory.favorite
-    ? `
-      <span
-        class="gallery-card__favorite"
-      >
-        ♡
-      </span>
-    `
-    : ""
-}
-
-<span
-  class="gallery-card__overlay"
->
-
-  <small>
-    ${formatDate(memory)}
-    ·
-    ${memory.location}
-  </small>
-
-  <strong>
-    ${memory.title}
-  </strong>
-
-</span>
-`;
-
-
-card.addEventListener(
-  "click",
-  () => {
-
-    selectMemory(
-      index,
-      true
-    );
-
-  }
-);
-
-
-galleryGrid.appendChild(
-  card
-);
-
-}
-);
-
-}
-
-
-/* =========================================
-   GALLERY FILTER
-========================================= */
-
-$$(".filter-button")
-  .forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          galleryFilter =
-            button.dataset.filter;
-
-
-          $$(".filter-button")
-            .forEach(
-              (item) => {
-
-                item.classList.toggle(
-                  "is-active",
-                  item === button
-                );
-
-              }
-            );
-
-
-          renderGallery();
-
+          image.src =
+            memory.image;
         }
       );
-
-    }
-  );
-
-
-/* =========================================
-   EXPANDED CORE
-========================================= */
-
-const expandedPositions = [
-
-  [12, 26],
-  [23, 66],
-  [38, 12],
-  [61, 10],
-  [79, 26],
-  [83, 63],
-  [62, 79],
-  [35, 81]
-
-];
-
-
-function renderExpandedNodes() {
-
-  expandedCoreNodes.innerHTML =
-    "";
-
-
-  const visible =
-    memories.slice(-8);
-
-
-  const startIndex =
-    memories.length -
-    visible.length;
-
-
-  visible.forEach(
-    (
-      memory,
-      localIndex
-    ) => {
-
-      const realIndex =
-        startIndex +
-        localIndex;
-
-
-      const node =
-        document.createElement(
-          "button"
-        );
-
-
-      node.type =
-        "button";
-
-      node.className =
-        "expanded-node";
-
-      node.dataset.index =
-        realIndex;
-
-
-      const position =
-        expandedPositions[
-          localIndex %
-          expandedPositions.length
-        ];
-
-
-      node.style.left =
-        `${position[0]}%`;
-
-      node.style.top =
-        `${position[1]}%`;
-
-
-      node.innerHTML = `
-        <img
-          src="${memory.image}"
-          alt="${memory.title}"
-        >
-      `;
-
-
-      node.addEventListener(
-        "click",
-        () => {
-
-          selectMemory(
-            realIndex
-          );
-
-        }
-      );
-
-
-      expandedCoreNodes
-        .appendChild(node);
-
-    }
-  );
-
-}
-
-
-function updateExpandedCore() {
-
-  const memory =
-    memories[
-      currentMemoryIndex
-    ];
-
-
-  if (!memory) {
-    return;
   }
 
 
-  expandedCoreImage.src =
-    memory.image;
+  /* =========================================================
+     INITIALIZE
+  ========================================================= */
 
-  expandedCoreImage.alt =
-    memory.title;
+  function initialize() {
+    renderOrbitNodes();
 
-  expandedCoreTitle.textContent =
-    memory.title;
+    renderFeatured();
 
-  expandedCoreDate.textContent =
-    formatDate(memory);
+    renderGallery();
 
-  expandedCoreLocation.textContent =
-    memory.location;
+    renderFullCore();
 
+    preloadImages();
 
-  $$(".expanded-node")
-    .forEach(
-      (node) => {
-
-        node.classList.toggle(
-          "is-active",
-          Number(
-            node.dataset.index
-          ) ===
-            currentMemoryIndex
-        );
-
-      }
-    );
-
-}
-
-
-expandedCoreCenter
-  ?.addEventListener(
-    "click",
-    () => {
-
-      openMemory(
-        currentMemoryIndex
-      );
-
-    }
-  );
-
-
-/* =========================================
-   MEMORY MODAL
-========================================= */
-
-function openMemory(index) {
-
-  if (
-    index < 0 ||
-    index >= memories.length
-  ) {
-    return;
+    focusTotalNumber.textContent =
+      pad(memories.length);
   }
 
 
-  currentMemoryIndex =
-    index;
-
-
-  const memory =
-    memories[index];
-
-
-  detailImage.src =
-    memory.image;
-
-  detailImage.alt =
-    memory.title;
-
-  detailIndex.textContent =
-    pad(index + 1);
-
-  detailTotal.textContent =
-    pad(memories.length);
-
-  detailDate.textContent =
-    formatDate(memory);
-
-  detailLocation.textContent =
-    memory.location;
-
-  detailTitle.textContent =
-    memory.title;
-
-  detailCaption.textContent =
-    memory.caption;
-
-
-  detailTags.innerHTML =
-    memory.tags
-      .map(
-        (tag) =>
-          `<span>#${tag}</span>`
-      )
-      .join("");
-
-
-  favoriteButton
-    .classList.toggle(
-      "is-favorite",
-      memory.favorite
-    );
-
-
-  favoriteButton.textContent =
-    memory.favorite
-      ? "♥"
-      : "♡";
-
-
-  memoryModal.classList.add(
-    "is-open"
-  );
-
-
-  memoryModal.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-
-  document.body.style.overflow =
-    "hidden";
-
-
-  updateCore();
-  updateExpandedCore();
-  renderMiniTimeline();
-
-}
-
-
-function closeMemory() {
-
-  memoryModal.classList.remove(
-    "is-open"
-  );
-
-
-  memoryModal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-modalBackdrop
-  ?.addEventListener(
-    "click",
-    closeMemory
-  );
-
-
-closeMemoryButton
-  ?.addEventListener(
-    "click",
-    closeMemory
-  );
-
-
-detailPreviousButton
-  ?.addEventListener(
-    "click",
-    () => {
-
-      previousMemory(true);
-
-    }
-  );
-
-
-detailNextButton
-  ?.addEventListener(
-    "click",
-    () => {
-
-      nextMemory(true);
-
-    }
-  );
-
-
-favoriteButton
-  ?.addEventListener(
-    "click",
-    () => {
-
-      const memory =
-        memories[
-          currentMemoryIndex
-        ];
-
-
-      memory.favorite =
-        !memory.favorite;
-
-
-      favoriteButton
-        .classList.toggle(
-          "is-favorite",
-          memory.favorite
-        );
-
-
-      favoriteButton.textContent =
-        memory.favorite
-          ? "♥"
-          : "♡";
-
-
-      renderGallery();
-
-    }
-  );
-
-
-/* =========================================
-   KEYBOARD
-========================================= */
-
-document.addEventListener(
-  "keydown",
-  (event) => {
-
-    if (
-      !memoryModal
-        .classList
-        .contains(
-          "is-open"
-        )
-    ) {
-      return;
-    }
-
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-
-      closeMemory();
-
-    }
-
-
-    if (
-      event.key ===
-      "ArrowLeft"
-    ) {
-
-      previousMemory(true);
-
-    }
-
-
-    if (
-      event.key ===
-      "ArrowRight"
-    ) {
-
-      nextMemory(true);
-
-    }
-
-  }
-);
-
-
-/* =========================================
-   INITIALIZE
-========================================= */
-
-function initialize() {
-
-  renderMemoryNodes();
-
-  renderExpandedNodes();
-
-  renderStats();
-
-  renderMiniTimeline();
-
-  renderTimeline();
-
-  renderGallery();
-
-  updateCore();
-
-  updateExpandedCore();
-
-}
-
-
-initialize();
-
+  initialize();
 });
